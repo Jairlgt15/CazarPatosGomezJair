@@ -36,7 +36,9 @@ class MainActivity : AppCompatActivity() {
 
         //Obtener el usuario de pantalla login
         val extras = intent.extras ?: return
-        val usuario = extras.getString(EXTRA_LOGIN) ?:"Unknown"
+        var usuario = extras.getString(EXTRA_LOGIN) ?:"Unknown"
+        val split = usuario.split("@").toTypedArray()
+        usuario = split[0]
         textViewUsuario.setText(usuario)
         //Determina el ancho y largo de pantalla
         inicializarPantalla()
