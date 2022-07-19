@@ -1,6 +1,8 @@
 package com.gomezjair.cazarpatosgmezjair
 
+import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -76,10 +78,13 @@ class MainActivity : AppCompatActivity() {
                 reiniciarJuego()
             }
             R.id.action_jugar_online -> {
-
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://duckhuntjs.com/"))
+                startActivity(browserIntent)
 
             }
             R.id.action_salir -> {
+                val segundaPantalla = Intent(this,LoginActivity::class.java)
+                startActivity(segundaPantalla)
 
             }
             else -> {
