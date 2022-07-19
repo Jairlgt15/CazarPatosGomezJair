@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         builder
             .setMessage("Felicidades!!\nHas conseguido cazar $contador patos")
             .setTitle("Fin del juego")
+            .setIcon(android.R.drawable.ic_dialog_alert)
             .setPositiveButton("Reiniciar",
                 { _, _ ->
                     reiniciarJuego()
