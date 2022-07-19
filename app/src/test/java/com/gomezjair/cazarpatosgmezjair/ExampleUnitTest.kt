@@ -1,4 +1,4 @@
-package com.jairgomez.cazarpatosgmezjair
+package com.gomezjair.cazarpatosgmezjair
 
 import org.junit.Test
 
