@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
@@ -40,6 +41,10 @@ class MainActivity : AppCompatActivity() {
         val split = usuario.split("@").toTypedArray()
         usuario = split[0]
         textViewUsuario.setText(usuario)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
         //Determina el ancho y largo de pantalla
         inicializarPantalla()
         //Cuenta regresiva del juego
@@ -59,6 +64,28 @@ class MainActivity : AppCompatActivity() {
             }, 500)
 
         }
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_nuevo_juego -> {
+                reiniciarJuego()
+            }
+            R.id.action_jugar_online -> {
+
+            }
+            R.id.action_salir -> {
+
+            }
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
+        return true
     }
 
     private fun inicializarPantalla() {
