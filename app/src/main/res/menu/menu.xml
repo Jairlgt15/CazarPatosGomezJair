@@ -7,13 +7,13 @@
     <item
         android:id="@+id/action_nuevo_juego"
         android:icon="@drawable/bg_game"
-        android:title="Nuevo Juego"
+        android:title="Nuevo juego"
         />
 
     <item
         android:id="@+id/action_jugar_online"
         android:icon="@drawable/bg_game"
-        android:title="Jugar Online"
+        android:title="Jugar online"
         />
 
     <item

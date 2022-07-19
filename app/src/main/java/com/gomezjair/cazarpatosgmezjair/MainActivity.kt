@@ -67,13 +67,13 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu,menu)
-        return super.onCreateOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menuMain: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu,menuMain)
+        return super.onCreateOptionsMenu(menuMain)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+    override fun onOptionsItemSelected(itemMenuMain: MenuItem): Boolean {
+        when(itemMenuMain.itemId){
             R.id.action_nuevo_juego -> {
                 reiniciarJuego()
             }
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
             }
             else -> {
-                return super.onOptionsItemSelected(item)
+                return super.onOptionsItemSelected(itemMenuMain)
             }
         }
         return true
