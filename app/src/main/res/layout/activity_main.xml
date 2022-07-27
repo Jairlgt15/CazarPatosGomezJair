@@ -27,7 +27,8 @@
         android:layout_height="100dp"
         app:srcCompat="@drawable/duck"
         tools:layout_editor_absoluteX="141dp"
-        tools:layout_editor_absoluteY="239dp" />
+        tools:layout_editor_absoluteY="239dp"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageViewContador"
