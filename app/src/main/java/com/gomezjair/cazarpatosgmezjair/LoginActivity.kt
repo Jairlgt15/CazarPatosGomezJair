@@ -5,10 +5,15 @@ import android.content.Intent
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Toast
 import androidx.core.util.PatternsCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     lateinit var manejadorArchivo: FileHandler
@@ -18,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var buttonNewUser:Button
     lateinit var checkBoxRecordarme: CheckBox
     lateinit var mediaPlayer: MediaPlayer
+    private lateinit var auth: FirebaseAuth
 
     // savedInstanceState es el nombre de tipo Bundle o null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +40,9 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin = findViewById(R.id.buttonLogin)
         buttonNewUser = findViewById(R.id.buttonNewUser)
         checkBoxRecordarme = findViewById(R.id.checkBoxRecordarme)
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+
 
         LeerDatosDePreferencias()
 
@@ -47,10 +56,12 @@ class LoginActivity : AppCompatActivity() {
             //Guardar datos en preferencias.
             GuardarDatosEnPreferencias()
 
+            AutenticarUsuario(email, clave)
+
             //Si pasa validación de datos requeridos, ir a pantalla principal
-            val intencion = Intent(this, MainActivity::class.java)
+         /*   val intencion = Intent(this, MainActivity::class.java)
             intencion.putExtra(EXTRA_LOGIN, email)
-            startActivity(intencion)
+            startActivity(intencion)*/
         }
         buttonNewUser.setOnClickListener{
 
@@ -58,7 +69,28 @@ class LoginActivity : AppCompatActivity() {
         mediaPlayer=MediaPlayer.create(this, R.raw.title_screen)
         mediaPlayer.start()
     }
-    override fun onSupportNavigateUp(): Boolean {
+    fun AutenticarUsuario(email:String, password:String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d(EXTRA_LOGIN, "signInWithEmail:success")
+                    //Si pasa validación de datos requeridos, ir a pantalla principal
+                    val intencion = Intent(this, MainActivity::class.java)
+                    intencion.putExtra(EXTRA_LOGIN, auth.currentUser!!.email)
+                    startActivity(intencion)
+                    //finish()
+                } else {
+                    Log.w(EXTRA_LOGIN, "signInWithEmail:failure", task.exception)
+                    Toast.makeText(
+                        baseContext, task.exception!!.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+
+                override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
