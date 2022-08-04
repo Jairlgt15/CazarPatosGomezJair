@@ -12,6 +12,12 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 
@@ -19,16 +25,25 @@ class MainActivity : AppCompatActivity() {
     lateinit var textViewUsuario: TextView
     lateinit var textViewContador: TextView
     lateinit var textViewTiempo: TextView
+    lateinit var mAdView: AdView
     lateinit var imageViewPato: ImageView
     var contador = 0
     var anchoPantalla = 0
     var alturaPantalla = 0
     var gameOver = false
+    private lateinit var database: DatabaseReference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        MobileAds.initialize(this) {}
+        //ads iniciliacacion y carga
+        mAdView = findViewById(R.id.adView)
+
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
+
 
         //Inicialización de variables
         // encontrar los ids del xml
@@ -36,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         textViewContador = findViewById(R.id.textViewContador)
         textViewTiempo = findViewById(R.id.textViewTiempo)
         imageViewPato = findViewById(R.id.imageViewPato)
-
+        database = Firebase.database.reference
         //Obtener el usuario de pantalla login
         val extras = intent.extras ?: return
         var usuario = extras.getString(EXTRA_LOGIN) ?:"Unknown"
@@ -122,6 +137,9 @@ class MainActivity : AppCompatActivity() {
             textViewTiempo.setText("0s")
             gameOver = true
             mostrarDialogoGameOver()
+            val nombreJugador= textViewUsuario.text.toString()
+            val patosCazados=textViewContador.text.toString()
+            procesarPuntajePatosCazadosRTB(nombreJugador,patosCazados.toInt())
         }
     }
     private fun inicializarCuentaRegresiva() {
@@ -150,6 +168,12 @@ class MainActivity : AppCompatActivity() {
         textViewContador.setText(contador.toString())
         moverPato()
         inicializarCuentaRegresiva()
+    }
+    fun procesarPuntajePatosCazadosRTB(nombreJugador:String, patosCazados:Int){
+        val jugador = Jugador(nombreJugador, patosCazados)
+        val nombreJugadorNuevo=nombreJugador.replace('.','_')
+        database.child("ranking").child(nombreJugadorNuevo).setValue(jugador)
+
     }
 
 

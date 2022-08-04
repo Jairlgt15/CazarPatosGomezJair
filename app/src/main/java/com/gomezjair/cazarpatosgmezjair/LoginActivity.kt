@@ -14,6 +14,8 @@ import androidx.core.util.PatternsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 
 class LoginActivity : AppCompatActivity() {
     lateinit var manejadorArchivo: FileHandler
@@ -24,6 +26,8 @@ class LoginActivity : AppCompatActivity() {
     lateinit var checkBoxRecordarme: CheckBox
     lateinit var mediaPlayer: MediaPlayer
     private lateinit var auth: FirebaseAuth
+    private lateinit var storage: FirebaseStorage
+
 
     // savedInstanceState es el nombre de tipo Bundle o null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
         checkBoxRecordarme = findViewById(R.id.checkBoxRecordarme)
         // Initialize Firebase Auth
         auth = Firebase.auth
+        storage= Firebase.storage
 
 
         LeerDatosDePreferencias()
@@ -64,6 +69,13 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intencion)*/
         }
         buttonNewUser.setOnClickListener{
+            val email = editTextEmail.text.toString()
+            val clave = editTextPassword.text.toString()
+            if(!ValidarDatosRequeridos())
+                return@setOnClickListener
+            //Guardar datos en preferencias.
+            GuardarDatosEnPreferencias()
+            SignUpNewUser(email,clave)
 
         }
         mediaPlayer=MediaPlayer.create(this, R.raw.title_screen)
@@ -88,9 +100,29 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
+    fun SignUpNewUser(email:String, password:String){
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(EXTRA_LOGIN, "createUserWithEmail:success")
+                    val user = auth.currentUser
+                    Toast.makeText(baseContext, "New user saved.",
+                        Toast.LENGTH_SHORT).show()
+                    //updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(EXTRA_LOGIN, "createUserWithEmail:failure", task.exception)
+                    Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    //updateUI(null)
+                }
+            }
+    }
 
 
-                override fun onSupportNavigateUp(): Boolean {
+
+    override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
     }

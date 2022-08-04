@@ -14,6 +14,7 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.CazarPatos.Personalizado">
+        <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimaryLight</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
